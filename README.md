@@ -103,6 +103,38 @@
 - docker run --rm busybox ping google.com → Teste de conectividade
 - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock docker → Docker in Docker
 
+# 🐳 Combinações Úteis de Comandos Docker
+
+## 🔄 Combinações com Subcomandos ($())
+
+### Remoção em Massa
+- docker container rm -f $(docker container ls -qa) → Remove **todos os containers** forçadamente
+- docker image rm -f $(docker image ls -q) → Remove **todas as imagens** forçadamente
+- docker volume rm $(docker volume ls -q) → Remove **todos os volumes**
+- docker network rm $(docker network ls -q) → Remove **todas as redes** não usadas
+
+### Limpeza de Sistema
+- docker system prune -f --volumes $(docker system df -q) → Limpeza completa do sistema
+- docker container stop $(docker container ls -q) → Para **todos os containers** em execução
+
+### Listagens Filtradas
+- docker container ls --filter "name=web" $(docker container ls -q) → Lista containers filtrados
+- docker image ls --filter "dangling=true" $(docker image ls -q) → Lista imagens órfãs
+
+## 🔍 Exemplos de Teste Seguro
+bash
+# Primeiro veja o que será executado:
+- echo $(docker container ls -qa)
+- echo $(ps aux | grep 'nginx' | awk '{print $2}')
+
+# Depois execute com confiança:
+- docker container rm -f $(docker container ls -qa)
+
+
+_______________________________________________________________________________________
+
+**💡 Dica:** Use `$(comando)` para automatizar tarefas repetitivas, mas **sempre teste com echo primeiro** para evitar acidentes!
+
 _______________________________________________________________________________________
 
 **Nota:** A maioria dos comandos aceita tanto o ID completo quanto os primeiros caracteres (desde que sejam únicos). Use `--help` após qualquer comando para ver opções específicas, exemplo: `docker run --help`.
