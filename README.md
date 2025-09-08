@@ -130,6 +130,18 @@ bash
 # Depois execute com confiança:
 - docker container rm -f $(docker container ls -qa)
 
+# MySQL
+
+- docker run -d \
+    --name mysql-container \
+    -p 3306:3306 \
+    -e MYSQL_ROOT_PASSWORD="senhaForte123!" \
+    -e MYSQL_DATABASE=bancodedados \
+    -e MYSQL_USER=adminThiago \
+    -e MYSQL_PASSWORD=senhaForte456! \
+    -v mysql_data:/var/lib/mysql \
+    mysql:8.0
+
 
 _______________________________________________________________________________________
 
