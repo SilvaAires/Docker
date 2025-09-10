@@ -1,210 +1,219 @@
-# 🐳 Lista de Comandos do Docker Engine
+# 🐳 **Guia Completo de Comandos Docker Engine (Ubuntu 24.04.3 LTS)**
 
-## 📋 Informações e Versão
-- docker version → Exibe a versão do Docker instalada
-- docker info → Mostra informações detalhadas do sistema Docker
-- docker system df → Exibe o uso de espaço em disco do Docker
+---
 
-## 🐳 Gerenciamento de Containers
+## 📋 **Informações e Versão**
 
-### Executando Containers
-- docker run [opções] imagem [comando] → Executa um container a partir de uma imagem
-- docker run -d --name meu_container nginx → Executa container em segundo plano
-- docker run -it ubuntu /bin/bash → Executa container interativo
-- docker run -p 8080:80 nginx → Mapeia porta do host para o container
-- docker run -v /host/path:/container/path nginx → Monta volume
+* `docker version` → Exibe versão cliente/servidor
+* `docker info` → Mostra detalhes do sistema Docker
+* `docker system info` → Informações completas do sistema
+* `docker system df [-v]` → Uso de disco (detalhado com `-v`)
+* `docker builder inspect` → Info sobre o builder
+* `docker buildx inspect` → Info sobre buildx
 
-### Listando e Monitorando
-- docker ps → Lista containers em execução
-- docker ps -a → Lista todos os containers (incluindo parados)
-- docker stats → Mostra estatísticas em tempo real dos containers
-- docker top container_id → Mostra processos em execução no container
-- docker logs container_id → Exibe logs do container
-- docker logs -f container_id → Segue logs em tempo real
+---
 
-### Gerenciando Containers
-- docker start container_id → Inicia um container parado
-- docker stop container_id → Para um container em execução
-- docker restart container_id → Reinicia um container
-- docker pause container_id → Pausa um container
-- docker unpause container_id → Despausa um container
-- docker rm container_id → Remove um container parado
-- docker rm -f container_id → Força remoção de container em execução
-- docker exec -it container_id /bin/bash → Executa comando em container running
-- docker attach container_id → Conecta ao terminal do container
+## 🐳 **Gerenciamento de Containers**
 
-## 🏞️ Gerenciamento de Imagens
+### 🚀 Executando Containers
 
-### Buscando e Baixando
-- docker search termo → Busca imagens no Docker Hub
-- docker pull imagem:tag → Baixa imagem do registry
-- docker images → Lista imagens locais
-- docker image ls → Lista imagens (formato mais recente)
+* `docker run [opções] imagem [comando]` → Cria e executa container
+* `docker run -d --name meu_container nginx` → Em segundo plano
+* `docker run -it ubuntu /bin/bash` → Interativo
+* `docker run -p 8080:80 nginx` → Mapear porta
+* `docker run -v /host:/container nginx` → Montar volume
+* `docker run --rm alpine sh` → Remove ao sair
 
-### Construindo Imagens
-- docker build -t minha-imagem:tag . → Constrói imagem do Dockerfile
-- docker build -f Dockerfile.dev . → Constrói usando Dockerfile específico
-- docker history imagem_id → Mostra histórico de camadas da imagem
+### 📊 Listando e Monitorando
 
-### Gerenciando Imagens
-- docker tag imagem_id novo_nome:tag → Adiciona tag à imagem
-- docker push usuario/imagem:tag → Envia imagem para registry
-- docker rmi imagem_id → Remove imagem local
-- docker rmi -f imagem_id → Força remoção de imagem
-- docker image prune → Remove imagens não utilizadas
+* `docker ps` → Lista containers ativos
+* `docker ps -a` → Todos containers
+* `docker ps --filter "status=exited"` → Filtro de estado
+* `docker stats` → Estatísticas em tempo real
+* `docker top container_id` → Processos no container
+* `docker logs container_id` → Logs
+* `docker logs -f container_id` → Logs em tempo real
+* `docker logs --tail 100 container_id` → Últimas 100 linhas
 
-## 🔗 Redes e Volumes
+### ⚙️ Gerenciando Containers
 
-### Gerenciamento de Redes
-- docker network ls → Lista redes disponíveis
-- docker network create minha_rede → Cria uma nova rede
-- docker network inspect minha_rede → Inspeciona rede
-- docker network connect rede container → Conecta container à rede
-- docker network disconnect rede container → Desconecta container da rede
-- docker network rm minha_rede → Remove rede
+* `docker start container_id` → Inicia parado
+* `docker stop container_id` → Para
+* `docker restart container_id` → Reinicia
+* `docker pause/unpause container_id` → Pausa/despausa
+* `docker rm container_id` → Remove parado
+* `docker rm -f container_id` → Força remoção
+* `docker exec -it container_id /bin/bash` → Executa comando dentro
+* `docker attach container_id` → Conecta terminal
 
-### Gerenciamento de Volumes
-- docker volume ls → Lista volumes
-- docker volume create meu_volume → Cria volume
-- docker volume inspect meu_volume → Inspeciona volume
-- docker volume rm meu_volume → Remove volume
-- docker volume prune → Remove volumes não utilizados
+### 📦 Export/Import Containers
 
-## 🧹 Limpeza e Manutenção
-- docker system prune → Remove containers, imagens e networks não utilizados
-- docker system prune -a → Remove todos os recursos não utilizados
-- docker container prune → Remove containers parados
-- docker image prune → Remove imagens não utilizadas
-- docker volume prune → Remove volumes não utilizados
-- docker network prune → Remove networks não utilizadas
+* `docker export container_id > container.tar` → Exporta container
+* `docker import container.tar` → Importa como imagem
 
-## 🔍 Inspeção e Debug
-- docker inspect recurso_id → Mostra informações detalhadas de qualquer recurso
-- docker diff container_id → Mostra arquivos modificados no container
-- docker cp container_id:/caminho/arquivo . → Copia arquivo do container para host
-- docker cp arquivo container_id:/caminho/ → Copia arquivo do host para container
-- docker port container_id → Mostra portas mapeadas do container
+### 🧩 Checkpoint e Restore (Experimental)
 
-## 🐳 Docker Compose (Complementar)
-- docker-compose up → Inicia serviços definidos no docker-compose.yml
-- docker-compose up -d → Inicia serviços em segundo plano
-- docker-compose down → Para e remove serviços
-- docker-compose ps → Lista serviços do compose
-- docker-compose logs → Mostra logs dos serviços
-- docker-compose build → Constrói imagens dos serviços
+* `docker checkpoint create container_id meu_checkpoint` → Cria checkpoint
+* `docker start --checkpoint meu_checkpoint container_id` → Restaura container
 
-## ⚙️ Configuração do Daemon
-- docker events → Mostra eventos do Docker em tempo real
-- docker login → Faz login no Docker Hub
-- docker logout → Faz logout do Docker Hub
+---
 
-## 🚨 Comandos Úteis para Troubleshooting
-- docker run --rm -it alpine sh → Container temporário para testes
-- docker run --rm busybox ping google.com → Teste de conectividade
-- docker run --rm -v /var/run/docker.sock:/var/run/docker.sock docker → Docker in Docker
+## 🏞️ **Gerenciamento de Imagens**
 
-# 🐳 Combinações Úteis de Comandos Docker
+### 🔍 Buscando e Baixando
 
-## 🔄 Combinações com Subcomandos ($())
+* `docker search termo` → Busca no Hub
+* `docker pull imagem:tag` → Baixa imagem
+* `docker images` ou `docker image ls` → Lista imagens
+* `docker images --filter dangling=true` → Apenas órfãs
 
-### Remoção em Massa
-- docker container rm -f $(docker container ls -qa) → Remove **todos os containers** forçadamente
-- docker image rm -f $(docker image ls -q) → Remove **todas as imagens** forçadamente
-- docker volume rm $(docker volume ls -q) → Remove **todos os volumes**
-- docker network rm $(docker network ls -q) → Remove **todas as redes** não usadas
+### 🏗️ Construindo Imagens
 
-### Limpeza de Sistema
-- docker system prune -f --volumes $(docker system df -q) → Limpeza completa do sistema
-- docker container stop $(docker container ls -q) → Para **todos os containers** em execução
+* `docker build -t minha-imagem:tag .` → Constrói imagem
+* `docker build -f Dockerfile.dev .` → Dockerfile específico
+* `DOCKER_BUILDKIT=1 docker build .` → Ativa BuildKit
+* `docker build --no-cache .` → Ignora cache
+* `docker build --platform linux/amd64,linux/arm64 .` → Multiplataforma
+* `docker history imagem_id` → Histórico
 
-### Listagens Filtradas
-- docker container ls --filter "name=web" $(docker container ls -q) → Lista containers filtrados
-- docker image ls --filter "dangling=true" $(docker image ls -q) → Lista imagens órfãs
+### 🗂️ Gerenciando Imagens
 
-## 📋 INFORMAÇÕES E VERSÃO
-- docker system info → Informações detalhadas do sistema Docker
-- docker builder inspect → Informações do builder
-- docker buildx inspect → Inspecionar buildx
+* `docker tag imagem_id novo_nome:tag` → Adiciona tag
+* `docker push usuario/imagem:tag` → Envia ao registry
+* `docker rmi imagem_id` → Remove local
+* `docker rmi -f imagem_id` → Força remoção
+* `docker image prune` → Remove não utilizadas
+* `docker save -o arquivo.tar imagem:tag` → Exporta imagem
+* `docker load -i arquivo.tar` → Importa imagem
 
-## 🏗️ CONSTRUÇÃO DE IMAGENS
-- DOCKER_BUILDKIT=1 docker build . → Ativar BuildKit
-- docker build --progress=plain . → Modo verbose de build
-- docker build --platform linux/amd64,linux/arm64 . → Build multiplataforma
-- docker build --no-cache . → Ignorar cache
-- docker build --cache-from=image:tag → Usar cache específico
-- docker build --metadata-file meta.json . → Exportar metadados
+---
 
-## 🎯 DOCKER COMPOSE AVANÇADO
-- docker compose --profile frontend up → Executar com perfil específico
-- docker compose --scale web=3 → Escalar serviços
-- docker compose --env-file .env.prod up → Usar arquivo env específico
+## 🔗 **Redes e Volumes**
 
-## 🔍 INSPEÇÃO AVANÇADA
-- docker system events --format '{{json .}}' → Eventos em JSON
-- docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}" → Stats formatados
+### 🌐 Redes
 
-## 🌐 REDES AVANÇADAS
-- docker network create --driver overlay my-network → Rede overlay
-- docker network create --subnet 172.20.0.0/16 my-net → Rede com subnet específica
+* `docker network ls` → Lista redes
+* `docker network create minha_rede` → Cria rede
+* `docker network inspect minha_rede` → Inspeciona
+* `docker network connect rede container` → Conecta container
+* `docker network disconnect rede container` → Desconecta
+* `docker network rm minha_rede` → Remove rede
+* `docker network create --driver overlay minha_rede` → Overlay
+* `docker network create --subnet 172.20.0.0/16 minha_rede` → Subnet
 
-## 🔐 SEGURANÇA
-- docker scan minha-imagem → Scan de vulnerabilidades
-- docker scan --json minha-imagem → Scan em formato JSON
+### 💾 Volumes
 
-## ⚡ PERFORMANCE
-- docker system df -v → Uso de espaço detalhado
-- docker builder prune --all --force → Limpar builder
+* `docker volume ls` → Lista volumes
+* `docker volume create meu_volume` → Cria volume
+* `docker volume inspect meu_volume` → Inspeciona
+* `docker volume rm meu_volume` → Remove
+* `docker volume prune` → Remove não usados
+* `docker volume create --driver local --opt type=none --opt device=/path/to/data --opt o=bind nome` → Volume bind
 
-## 📊 FORMATAÇÃO JSON
-- docker ps --format '{{json .}}' → Containers em JSON
-- docker images --format '{{.ID}}\t{{.Repository}}' → Imagens formatadas
+---
 
-## 💾 DOCKER COMMIT
-- docker commit container_id minha-imagem:tag → Cria imagem a partir do container
-- docker commit --author "Nome email" container_id imagem:tag → Especifica autor
-- docker commit --message "Descrição" container_id imagem:tag → Adiciona mensagem
-- docker commit --change 'ENV DEBUG=true' container_id imagem:tag → Aplica mudanças
-- docker commit --change 'WORKDIR /app' container_id imagem:tag → Altera diretório
-- docker commit --change 'CMD ["npm", "start"]' container_id imagem:tag → Define comando
+## 🧹 **Limpeza e Manutenção**
 
-## 🐳 COMANDOS SWARM
-- docker swarm init → Inicializar swarm
-- docker swarm join-token worker → Mostrar token de join
-- docker node ls → Listar nodes
-- docker service ls → Listar serviços
+* `docker system prune` → Remove não usados
+* `docker system prune -a` → Remove todos não usados
+* `docker container prune` → Remove parados
+* `docker image prune` → Remove imagens órfãs
+* `docker volume prune` → Volumes não usados
+* `docker network prune` → Redes não usadas
+* `docker builder prune --all --force` → Limpa cache build
 
-## 📦 VOLUMES AVANÇADOS
-- docker volume create --driver local --opt type=none --opt device=/path/to/data --opt o=bind named-volume → Volume com bind específico
+---
 
-## 🤖 TESTCONTAINERS
-- docker run --rm -it -v /var/run/docker.sock:/var/run/docker.sock testcontainers/cloud-local testcontainers config → Configurar Testcontainers
+## 🔍 **Inspeção e Debug**
 
-## 🔍 Exemplos de Teste Seguro
-bash
-# Primeiro veja o que será executado:
-- echo $(docker container ls -qa)
-- echo $(ps aux | grep 'nginx' | awk '{print $2}')
+* `docker inspect recurso_id` → Informações detalhadas
+* `docker diff container_id` → Arquivos modificados
+* `docker cp container_id:/arquivo .` → Copia do container
+* `docker cp arquivo container_id:/path/` → Copia para container
+* `docker port container_id` → Portas mapeadas
+* `docker events` → Eventos em tempo real
+* `docker system events --format '{{json .}}'` → Eventos em JSON
 
-# Depois execute com confiança:
-- docker container rm -f $(docker container ls -qa)
+---
 
-# MySQL
+## 🐳 **Docker Compose**
 
-- docker run -d \
-    --name mysql-container \
-    -p 3306:3306 \
-    -e MYSQL_ROOT_PASSWORD="senhaForte123!" \
-    -e MYSQL_DATABASE=bancodedados \
-    -e MYSQL_USER=adminThiago \
-    -e MYSQL_PASSWORD=senhaForte456! \
-    -v mysql_data:/var/lib/mysql \
-    mysql:8.0
+* `docker compose up` → Inicia serviços
+* `docker compose up -d` → Inicia em segundo plano
+* `docker compose down` → Para e remove serviços
+* `docker compose ps` → Lista serviços
+* `docker compose logs` → Logs dos serviços
+* `docker compose build` → Constrói imagens
+* `docker compose --scale web=3` → Escala serviço
+* `docker compose --profile frontend up` → Perfil específico
+* `docker compose --env-file .env.prod up` → Arquivo env
 
+---
 
-_______________________________________________________________________________________
+## 🔐 **Segurança e Registry**
 
-**💡 Dica:** Use `$(comando)` para automatizar tarefas repetitivas, mas **sempre teste com echo primeiro** para evitar acidentes!
+* `docker login` / `docker logout` → Hub oficial
+* `docker login registry.meuservidor.com` → Registry privado
+* `docker scan minha-imagem` → Scan vulnerabilidades
+* `docker scan --json minha-imagem` → Saída JSON
 
-_______________________________________________________________________________________
+---
 
-**Nota:** A maioria dos comandos aceita tanto o ID completo quanto os primeiros caracteres (desde que sejam únicos). Use `--help` após qualquer comando para ver opções específicas, exemplo: `docker run --help`.
+## ⚡ **Avançados**
+
+### 🐳 Commit
+
+* `docker commit container_id minha-imagem:tag` → Cria imagem
+* `docker commit --author "Nome" --message "Descrição" container_id imagem:tag` → Detalhado
+* `docker commit --change 'CMD ["npm", "start"]' container_id imagem:tag` → Modifica config
+
+### 🐳 Swarm
+
+* `docker swarm init` → Inicializa cluster
+* `docker swarm join-token worker` → Token de join
+* `docker node ls` → Lista nós
+* `docker service ls` → Lista serviços
+* `docker stack deploy -c docker-compose.yml mystack` → Deploy de stack
+* `docker stack ps mystack` → Processos da stack
+* `docker stack rm mystack` → Remove stack
+
+---
+
+## 📊 **Formatação de Saída**
+
+* `docker ps --format '{{json .}}'` → Saída JSON
+* `docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}’` → Estatísticas formatadas
+* `docker images --format '{{.ID}}\t{{.Repository}}'` → Lista formatada
+
+---
+
+## 🚨 **Troubleshooting**
+
+* `docker run --rm busybox ping google.com` → Teste rede
+* `docker run --rm -it -v /var/run/docker.sock:/var/run/docker.sock docker` → Docker-in-Docker
+* `docker container stop $(docker ps -q)` → Para todos
+* `docker container rm -f $(docker ps -qa)` → Remove todos
+* `docker image rm -f $(docker images -q)` → Remove todas imagens
+
+---
+
+## 🐳 **Exemplo: MySQL**
+
+```bash
+docker run -d \
+  --name mysql-container \
+  -p 3306:3306 \
+  -e MYSQL_ROOT_PASSWORD="senhaForte123!" \
+  -e MYSQL_DATABASE=bancodedados \
+  -e MYSQL_USER=adminThiago \
+  -e MYSQL_PASSWORD=senhaForte456! \
+  -v mysql_data:/var/lib/mysql \
+  mysql:8.0
+```
+
+---
+
+💡 **Dica:** sempre teste comandos de massa com `echo $(...)` antes de executar.
+📌 **Nota:** qualquer comando pode ser detalhado com `--help`.
+
+---
