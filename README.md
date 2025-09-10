@@ -217,3 +217,118 @@ docker run -d \
 📌 **Nota:** qualquer comando pode ser detalhado com `--help`.
 
 ---
+
+# 📑 O que consta na **documentação oficial do Docker Engine**
+
+### 🔹 1. Comandos principais de **containers**
+
+* `docker create` – cria um novo container mas não o inicia.
+* `docker start` – inicia um ou mais containers parados.
+* `docker run` – cria e inicia um container.
+* `docker exec` – executa um comando em um container em execução.
+* `docker ps` – lista containers.
+* `docker stop` – para um ou mais containers.
+* `docker kill` – envia sinal para containers.
+* `docker restart` – reinicia um ou mais containers.
+* `docker rm` – remove containers.
+* `docker pause` / `docker unpause` – pausa ou retoma processos dentro de containers.
+* `docker attach` – anexa seu terminal a um container.
+* `docker wait` – bloqueia até o container parar, retornando o código de saída.
+* `docker export` – exporta o sistema de arquivos de um container como tar.
+* `docker import` – importa um tar para criar uma imagem.
+* `docker cp` – copia arquivos entre host e container.
+* `docker commit` – cria uma nova imagem a partir de um container.
+
+---
+
+### 🔹 2. Comandos principais de **imagens**
+
+* `docker build` – constrói uma imagem a partir de um Dockerfile.
+* `docker pull` – baixa uma imagem de um registry.
+* `docker push` – envia uma imagem para um registry.
+* `docker images` – lista imagens.
+* `docker rmi` – remove imagens.
+* `docker save` – salva uma imagem em arquivo tar.
+* `docker load` – carrega imagem a partir de arquivo tar.
+* `docker tag` – marca uma imagem com outro nome.
+* `docker history` – mostra histórico de camadas de uma imagem.
+* `docker inspect` – mostra detalhes de imagens ou containers.
+
+---
+
+### 🔹 3. Comandos de **volumes**
+
+* `docker volume create`
+* `docker volume ls`
+* `docker volume inspect`
+* `docker volume rm`
+* `docker volume prune`
+
+---
+
+### 🔹 4. Comandos de **redes**
+
+* `docker network create`
+* `docker network ls`
+* `docker network inspect`
+* `docker network connect`
+* `docker network disconnect`
+* `docker network rm`
+* `docker network prune`
+
+---
+
+### 🔹 5. Comandos de **sistema**
+
+* `docker info` – exibe informações detalhadas sobre o sistema Docker.
+* `docker version` – mostra versão do client/daemon.
+* `docker system df` – mostra uso de disco.
+* `docker system prune` – limpa recursos não usados.
+
+---
+
+### 🔹 6. **Swarm mode**
+
+* `docker swarm init` / `docker swarm join`
+* `docker swarm leave`
+* `docker node ls` / `docker node inspect`
+* `docker service create` / `docker service ls` / `docker service ps` / `docker service rm`
+* `docker stack deploy` / `docker stack services` / `docker stack rm` / `docker stack ps`
+
+---
+
+### 🔹 7. **Configurações e secrets**
+
+* `docker config create` / `docker config ls` / `docker config rm`
+* `docker secret create` / `docker secret ls` / `docker secret rm`
+
+---
+
+### 🔹 8. **Plugins**
+
+* `docker plugin install` / `docker plugin ls` / `docker plugin rm` / `docker plugin enable` / `docker plugin disable`
+
+---
+
+### 🔹 9. **Checkpoint & restore** (experimental)
+
+* `docker checkpoint create`
+* `docker start --checkpoint`
+
+---
+
+### 🔹 10. **Outros pontos da doc**
+
+Além dos comandos, a documentação oficial cobre:
+
+* **Storage drivers** (`overlay2`, `btrfs`, `zfs`, etc.).
+* **Logging drivers** (`json-file`, `syslog`, `journald`, etc.).
+* **Daemon (`dockerd`)**
+
+  * Configuração via flags (`--debug`, `--storage-driver`)
+  * Configuração via `daemon.json`.
+* **Rootless mode** – rodar Docker sem privilégios root.
+* **API do Docker Engine** – REST API para automação.
+* **Compose plugin** (`docker compose` já integrado no CLI novo).
+
+---
