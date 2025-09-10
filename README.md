@@ -332,3 +332,204 @@ Além dos comandos, a documentação oficial cobre:
 * **Compose plugin** (`docker compose` já integrado no CLI novo).
 
 ---
+
+# 🐳 **PASSO A PASSO DOCKER COM DESCRIÇÕES**
+
+```bash
+# 1. Executa container Ubuntu interativo com porta 8080
+docker container run -it -p 8080:8080 ubuntu /bin/bash
+
+# Usar names para facilitar
+docker run --name meu-container -it -p 8080:8080 ubuntu
+
+# 2. Lista containers em execução
+docker ps 
+
+# 3. Lista todos os containers (incluindo parados)
+docker ps -a  
+
+# Ver logs da aplicação
+docker logs nome-container
+
+# 4. Copia arquivos do diretório atual para /app no container
+docker container cp . IdouNomeContainer:/app
+
+# 5. Cria nova imagem a partir do container modificado
+docker commit 2eb1e70d85b4 imagem-node  
+
+# 6. Lista imagens disponíveis (formato novo)
+docker image ls     
+
+# 7. Lista imagens disponíveis (formato clássico)
+docker images  
+
+# 8. Remove container forçadamente pelo ID
+docker rm -f 2eb1e70d85b4        
+
+# 9. Executa nova imagem em modo interativo
+docker container run -it -p 8080:8080 imagem-node /bin/bash
+
+# 10. Executa aplicação Node.js em segundo plano
+docker container run -d -p 8080:8080 imagem-node node /app/server.js
+
+# Executar comandos dentro do container
+docker exec -it nome-container bash
+
+# 11. Lista todos os containers novamente
+docker ps -a
+
+# 12. Lista containers em execução
+docker ps
+
+# Parar todos os containers
+docker stop $(docker ps -q)
+
+# Remover todos os containers parados
+docker container prune
+
+# 13. Remove container forçadamente (precisa especificar ID)
+docker rm -f
+
+# 14. Remove outro container forçadamente (precisa especificar ID)
+docker rm -f
+
+# 15. Verifica containers existentes
+docker ps -a
+
+# 16. Verifica containers em execução
+docker ps 
+
+# 17. Lista todas as imagens disponíveis
+docker image ls
+```
+
+# 🐳 **FLUXO COMPLETO DOCKER - DESENVOLVIMENTO À PRODUÇÃO**
+
+## 🚀 **FLUXO INTEGRADO PASSO A PASSO**
+
+```bash
+# 1. 👷‍♂️ PREPARAÇÃO DO AMBIENTE
+docker network create app-network
+
+# 2. 🛠️ DESENVOLVIMENTO (Container interativo)
+docker run -it -p 8080:8080 -v $(pwd):/app --name dev-container --network app-network ubuntu:22.04 /bin/bash
+
+# → Dentro do container:
+apt update && apt install -y nodejs npm curl
+npm install
+exit
+
+# 3. 💾 SALVAR ESTADO DE DESENVOLVIMENTO
+docker commit --author "Dev <dev@email.com>" --message "Ambiente dev configurado" dev-container app-dev:1.0
+
+# 4. 🧹 LIMPAR CONTAINER TEMPORÁRIO
+docker stop dev-container
+docker rm dev-container
+
+# 5. 🧪 TESTAR IMAGEM DEV
+docker run -d -p 8080:8080 --name test-container --network app-network app-dev:1.0 npm start
+
+# 6. 🔍 MONITORAR TESTE
+docker logs -f test-container
+docker stats test-container
+
+# 7. ✅ SE TUDO OK, PREPARAR PARA PRODUÇÃO
+docker exec -it test-container npm run build
+docker commit test-container app-prod:1.0
+
+# 8. 🏷️ TAGGEAR PARA REGISTRY
+docker tag app-prod:1.0 meuregistro.com/app-prod:1.0
+
+# 9. 🚀 FAZER PUSH
+docker push meuregistro.com/app-prod:1.0
+
+# 10. 🧹 LIMPAR AMBIENTE DE TESTE
+docker stop test-container
+docker rm test-container
+
+# 11. 🐳 IMPLANTAR EM PRODUÇÃO
+docker run -d -p 8080:8080 --name production-container --network app-network -e NODE_ENV=production meuregistro.com/app-prod:1.0
+
+# 12. 📊 MONITORAR PRODUÇÃO
+docker logs production-container
+docker stats production-container
+docker inspect production-container
+
+# 13. 🔧 COMANDOS DE MANUTENÇÃO
+# Ver saúde da aplicação
+docker inspect --format='{{.State.Health.Status}}' production-container
+
+# Backup de dados
+docker cp production-container:/app/data ./backup/
+
+# Acessar container para troubleshooting
+docker exec -it production-container bash
+
+# 14. 📦 ROTINA DE LIMPEZA
+docker system df
+docker image prune -a
+docker container prune
+docker network prune
+
+# 15. 🚨 EM CASO DE PROBLEMAS
+docker restart production-container
+docker logs --tail 100 production-container
+```
+
+## 🔄 **FLUXO SIMPLIFICADO PARA USO DIÁRIO**
+
+```bash
+# 1. Desenvolvimento
+docker run -it -v $(pwd):/app --name dev ubuntu:22.04 /bin/bash
+
+# 2. Commit das mudanças
+docker commit dev minha-app:dev
+
+# 3. Teste
+docker run -d -p 8080:8080 minha-app:dev
+
+# 4. Deploy
+docker tag minha-app:dev registry.com/app:latest
+docker push registry.com/app:latest
+
+# 5. Limpeza
+docker system prune -f
+```
+
+## 📋 **COMANDOS DE VERIFICAÇÃO DO FLUXO**
+
+```bash
+# Verificar rede
+docker network ls
+
+# Verificar containers
+docker ps -a
+
+# Verificar imagens
+docker images
+
+# Verificar registry
+docker image ls | grep registry.com
+
+# Verificar logs da aplicação
+docker logs --tail 50 production-container
+
+# Verificar saúde
+docker inspect --format='{{.State.Status}}' production-container
+```
+
+## ⚠️ **COMANDOS DE EMERGÊNCIA**
+
+```bash
+# Parar tudo
+docker stop $(docker ps -q)
+
+# Remover tudo
+docker rm $(docker ps -aq)
+docker rmi $(docker images -q)
+
+# Limpar completamente
+docker system prune -a --volumes --force
+```
+
+**Este fluxo cobre desde o desenvolvimento até a produção com monitoramento!** 🐳🚀
