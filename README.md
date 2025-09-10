@@ -121,6 +121,64 @@
 - docker container ls --filter "name=web" $(docker container ls -q) → Lista containers filtrados
 - docker image ls --filter "dangling=true" $(docker image ls -q) → Lista imagens órfãs
 
+## 📋 INFORMAÇÕES E VERSÃO
+- docker system info → Informações detalhadas do sistema Docker
+- docker builder inspect → Informações do builder
+- docker buildx inspect → Inspecionar buildx
+
+## 🏗️ CONSTRUÇÃO DE IMAGENS
+- DOCKER_BUILDKIT=1 docker build . → Ativar BuildKit
+- docker build --progress=plain . → Modo verbose de build
+- docker build --platform linux/amd64,linux/arm64 . → Build multiplataforma
+- docker build --no-cache . → Ignorar cache
+- docker build --cache-from=image:tag → Usar cache específico
+- docker build --metadata-file meta.json . → Exportar metadados
+
+## 🎯 DOCKER COMPOSE AVANÇADO
+- docker compose --profile frontend up → Executar com perfil específico
+- docker compose --scale web=3 → Escalar serviços
+- docker compose --env-file .env.prod up → Usar arquivo env específico
+
+## 🔍 INSPEÇÃO AVANÇADA
+- docker system events --format '{{json .}}' → Eventos em JSON
+- docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}" → Stats formatados
+
+## 🌐 REDES AVANÇADAS
+- docker network create --driver overlay my-network → Rede overlay
+- docker network create --subnet 172.20.0.0/16 my-net → Rede com subnet específica
+
+## 🔐 SEGURANÇA
+- docker scan minha-imagem → Scan de vulnerabilidades
+- docker scan --json minha-imagem → Scan em formato JSON
+
+## ⚡ PERFORMANCE
+- docker system df -v → Uso de espaço detalhado
+- docker builder prune --all --force → Limpar builder
+
+## 📊 FORMATAÇÃO JSON
+- docker ps --format '{{json .}}' → Containers em JSON
+- docker images --format '{{.ID}}\t{{.Repository}}' → Imagens formatadas
+
+## 💾 DOCKER COMMIT
+- docker commit container_id minha-imagem:tag → Cria imagem a partir do container
+- docker commit --author "Nome email" container_id imagem:tag → Especifica autor
+- docker commit --message "Descrição" container_id imagem:tag → Adiciona mensagem
+- docker commit --change 'ENV DEBUG=true' container_id imagem:tag → Aplica mudanças
+- docker commit --change 'WORKDIR /app' container_id imagem:tag → Altera diretório
+- docker commit --change 'CMD ["npm", "start"]' container_id imagem:tag → Define comando
+
+## 🐳 COMANDOS SWARM
+- docker swarm init → Inicializar swarm
+- docker swarm join-token worker → Mostrar token de join
+- docker node ls → Listar nodes
+- docker service ls → Listar serviços
+
+## 📦 VOLUMES AVANÇADOS
+- docker volume create --driver local --opt type=none --opt device=/path/to/data --opt o=bind named-volume → Volume com bind específico
+
+## 🤖 TESTCONTAINERS
+- docker run --rm -it -v /var/run/docker.sock:/var/run/docker.sock testcontainers/cloud-local testcontainers config → Configurar Testcontainers
+
 ## 🔍 Exemplos de Teste Seguro
 bash
 # Primeiro veja o que será executado:
